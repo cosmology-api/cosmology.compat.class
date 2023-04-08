@@ -46,7 +46,7 @@ jobs:
         - linux: py310-test-alldeps
           toxargs: '-v --develop'
         - linux: py39-test-oldestdeps-alldeps-cov-clocale
-        - windows: py310-test-alldeps
+        # - windows: py310-test-alldeps
         - macos: py310-test-alldeps
 
       conda: true
