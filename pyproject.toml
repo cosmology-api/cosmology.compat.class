@@ -33,7 +33,7 @@
   ]
   test = [
     "coverage[toml]",
-    "numpy>=1.20",
+    "numpy>=1.21",
     "pytest",
     "pytest-astropy",
   ]
