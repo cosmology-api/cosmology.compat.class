@@ -1,0 +1,172 @@
+[project]
+  name = "cosmology.compat.classy"
+  version = "0.1.0"
+  description = "Cosmology API standard compatability library for Astropy"
+  readme = "README.rst"
+  requires-python = ">=3.9"
+  license = {file = "LICENSE.txt"}
+  keywords = ["cosmology", "API"]
+  authors = [
+    {name = "Nathaniel Starkman", email = "n.starkman@mail.utoronto.ca"},
+    {name = "Nicolas Tessore", email = "n.tessore@ucl.ac.uk"}
+  ]
+  maintainers = [
+    {name = "Nathaniel Starkman", email = "n.starkman@mail.utoronto.ca"},
+    {name = "Nicolas Tessore", email = "n.tessore@ucl.ac.uk"}
+  ]
+  classifiers = [
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+  ]
+  dependencies = [
+    "cosmology.api @ git+https://github.com/cosmology-api/cosmology-api.git",
+    "cython",
+    "classy<3.0",
+    "typing_extensions>=3.7.4.2",
+  ]
+
+[project.optional-dependencies]
+  all = [
+  ]
+  test = [
+    "coverage[toml]",
+    "numpy>=1.18",
+    "pytest",
+    "pytest-astropy",
+  ]
+  docs = [
+    "furo",
+    "graphviz",
+    "IPython",
+    "jupyter_client",
+    "matplotlib",
+    "nbsphinx",
+    "pydata-sphinx-theme",
+    "sphinx",
+    "sphinx-astropy",
+    "sphinxcontrib.bibtex < 3.0.0",
+    "tomlkit",
+  ]
+
+[project.urls]
+  homepage = "https://cosmology.readthedocs.org/classy"
+  repository = "https://github.com/cosmology-api/cosmology-compat-classy"
+  documentation = "https://cosmology.readthedocs.org/classy"
+
+
+[build-system]
+  requires = [
+    "mypy>=0.991",
+    "setuptools>=45.0",
+    "setuptools_scm[toml]>=6.3.1",
+    "wheel",
+  ]
+
+  build-backend = 'setuptools.build_meta'
+
+
+[tool.setuptools]
+  package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+
+
+[tool.coverage.run]
+  omit = ["tests/*"]
+
+[tool.coverage.report]
+  exclude_lines = [
+    # Have to re-enable the standard pragma
+    # and branches that don't pertain to this version of Python
+    "pragma: no cover",
+    "pragma: py{ignore_python_version}",
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+    # Don't complain if non-runnable code isn't run
+    "if __name__ == .__main__.:",
+    # Don't complain about abstract methods, they aren't run:
+    '@(abc\.)?abstractmethod',
+    # Exclude type check blocks and Protocol contents, they aren't run:
+    "if TYPE_CHECKING:",
+    '\.\.\.',
+    # Don't complain about IPython completion helper
+    "def _ipython_key_completions_",
+  ]
+
+[tool.mypy]
+  python_version = 3.9
+
+  namespace_packages = true
+  explicit_package_bases = true
+  mypy_path = "$MYPY_CONFIG_FILE_DIR/src"
+
+  strict = true
+  disallow_subclassing_any = false
+  disallow_untyped_defs = true
+  no_implicit_optional = true
+  warn_return_any = true
+  warn_redundant_casts = true
+  warn_unused_configs = true
+  warn_unreachable = true
+  exclude = '''(^|/)tests/'''
+
+  [[tool.mypy.overrides]]
+    module = "tests/*"
+    ignore_errors = true
+
+  [[tool.mypy.overrides]]
+    module="cosmology.api.*"
+    ignore_missing_imports = true
+
+  [[tool.mypy.overrides]]
+    module="classy.*"
+    ignore_missing_imports = true
+
+  [[tool.mypy.overrides]]
+    module="numpy.*"
+    ignore_missing_imports = true
+
+  [[tool.mypy.overrides]]
+    module="tomli.*"
+    ignore_missing_imports = true
+
+
+[tool.ruff]
+target-version = "py39"
+line-length = 88
+
+select = ["ALL"]
+ignore = [
+  "ANN101", "ANN102", "ANN401",
+  "ARG001", "ARG002",
+  "COM812",  # trailing-comma-missing
+  "D105", "D107", "D203", "D213", "D401",
+  "FBT003",
+  "N802",
+  "PD",
+  "RET505", "RET506", "RET507",
+]
+
+[tool.ruff.per-file-ignores]
+"test_*.py" = ["ANN", "D", "N801", "N806", "S101", "SLF001"]
+"docs/*.py" = ["INP001"]
+
+[tool.ruff.isort]
+known-third-party = [
+  "classy",
+  "numpy",
+  "scipy",
+]
+known-first-party = [
+  "cosmology",
+]
+known-local-folder = [
+  "cosmology.compat.class",
+]
