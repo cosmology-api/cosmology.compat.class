@@ -2,17 +2,20 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from hypothesis.extra import numpy as npst
+
+if TYPE_CHECKING:
+    from numpy import floating
 
 
 # Hypothesis strategy for generating arrays of redshifts
 def z_arr_st(
     *,
     allow_nan: bool = False,
-    min_value: float | None = 0,
-    max_value: float | None = None,
+    min_value: floating | float | None = 0,
+    max_value: floating | float | None = None,
     **kwargs: Any,
 ) -> Any:
     """Hypothesis strategy for generating arrays of redshifts."""
