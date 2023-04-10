@@ -187,7 +187,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
 
     def Omega_gamma(self, z: InputT, /) -> NDFloating:
         """Redshift-dependent photon density parameter."""
-        raise NotImplementedError
+        return self.Omega_gamma0 * (z + 1.0) ** 4 / self.h_over_h0(z) ** 2
 
     # ----------------------------------------------
     # HasCriticalDensity
