@@ -187,10 +187,10 @@ class StandardCosmologyWrapper(CosmologyWrapper):
 
     def Omega_gamma(self, z: InputT, /) -> Array:
         """Redshift-dependent photon density parameter."""
-        return self.Omega_gamma0 * (z + 1.0) ** 4 / self.h_over_h0(z) ** 2
+        return self.Omega_gamma0 * (z + 1.0) ** 4 / self.H_over_H0(z) ** 2
 
     # ----------------------------------------------
-    # HasCriticalDensity
+    # CriticalDensity
 
     @property
     def critical_density0(self) -> Array:
@@ -202,7 +202,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         return np.array(3e6 * self.H(z) ** 2 / (8 * np.pi * constants.G))
 
     # ----------------------------------------------
-    # HasHubbleParameter
+    # HubbleParameter
 
     @property
     def H0(self) -> Array:
@@ -249,7 +249,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
 
     def T_cmb(self, z: InputT, /) -> Array:
         """Temperature of the CMB at redshift ``z``."""
-        return self.Tcmb0 * (z + 1)
+        return self.T_cmb0 * (z + 1)
 
     # ----------------------------------------------
     # Time
@@ -328,7 +328,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
 
     def _comoving_volume_positive(self, z: InputT, /) -> Array:
         dh = self.hubble_distance
-        x = self.comoving_transverse_distance(z) / dh
+        x = self.transverse_comoving_distance(z) / dh
         term1 = 4.0 * np.pi * dh**3 / (2.0 * self.Omega_k0)
         term2 = x * np.sqrt(1 + self.Omega_k0 * (x) ** 2)
         term3 = np.sqrt(np.abs(self.Omega_k0)) * x
@@ -339,7 +339,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
 
     def _comoving_volume_negative(self, z: InputT, /) -> Array:
         dh = self.hubble_distance
-        x = self.comoving_transverse_distance(z) / dh
+        x = self.transverse_comoving_distance(z) / dh
         term1 = 4.0 * np.pi * dh**3 / (2.0 * self.Omega_k0)
         term2 = x * np.sqrt(1 + self.Omega_k0 * (x) ** 2)
         term3 = np.sqrt(np.abs(self.Omega_k0)) * x
@@ -386,8 +386,8 @@ class StandardCosmologyWrapper(CosmologyWrapper):
 
         """
         return (
-            self.comoving_transverse_distance(z) / self.hubble_distance
-        ) ** 2 / self.h_over_h0(z)
+            self.transverse_comoving_distance(z) / self.hubble_distance
+        ) ** 2 / self.H_over_H0(z)
 
     # ----------------------------------------------
     # Proper

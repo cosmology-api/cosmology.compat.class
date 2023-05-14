@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 from hypothesis import given, settings
 
-from cosmology.api import HasDistanceMeasures
+from cosmology.api import DistanceMeasures
 
 from .conftest import z_arr_st
 
@@ -15,13 +15,13 @@ from .conftest import z_arr_st
 ################################################################################
 
 
-class HasDistanceMeasures_Test:
+class DistanceMeasures_Test:
     def test_wrapper_is_compliant(self, wrapper):
         """Test that AstropyCosmology is a BackgroundCosmologyWrapper."""
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        assert isinstance(wrapper, HasDistanceMeasures)
+        assert isinstance(wrapper, DistanceMeasures)
 
     # =========================================================================
 
@@ -37,15 +37,15 @@ class HasDistanceMeasures_Test:
         assert np.array_equal(a, 1 / (1 + z))
         assert isinstance(a, np.ndarray)
 
-    def test_Tcmb0(self, wrapper, cosmo):
+    def test_T_cmb0(self, wrapper, cosmo):
         """Test that the wrapper has the same Tcmb0 as the wrapped object."""
-        assert wrapper.Tcmb0 == cosmo.T_cmb()
-        assert isinstance(wrapper.Tcmb0, np.ndarray)
+        assert wrapper.T_cmb0 == cosmo.T_cmb()
+        assert isinstance(wrapper.T_cmb0, np.ndarray)
 
     @given(z_arr_st())
-    def test_Tcmb(self, wrapper, cosmo, z):
+    def test_T_cmb(self, wrapper, cosmo, z):
         """Test that the wrapper's Tcmb is the same as the wrapped object's."""
-        T = wrapper.Tcmb(z)
+        T = wrapper.T_cmb(z)
         assert np.array_equal(T, cosmo.T_cmb() * (1 + z))
         assert isinstance(T, np.ndarray)
 
@@ -76,9 +76,9 @@ class HasDistanceMeasures_Test:
     @pytest.mark.xfail(reason="TODO")
     @settings(deadline=500)
     @given(z_arr_st(min_value=np.float32(0.1), max_value=np.float32(1e5)))
-    def test_comoving_transverse_distance(self, wrapper, vcosmo, z):
-        """Test the wrapper's comoving_transverse_distance."""
-        d = wrapper.comoving_transverse_distance(z)
+    def test_transverse_comoving_distance(self, wrapper, vcosmo, z):
+        """Test the wrapper's transverse_comoving_distance."""
+        d = wrapper.transverse_comoving_distance(z)
         assert np.allclose(d, vcosmo.angular_diameter_distance(z) * (1 + z))
         assert isinstance(d, np.ndarray)
 

@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 from hypothesis import given
 
-from cosmology.api import HasCriticalDensity, HasHubbleParameter
+from cosmology.api import CriticalDensity, HubbleParameter
 from cosmology.compat.classy import constants
 
 from .conftest import z_arr_st
@@ -15,13 +15,13 @@ from .conftest import z_arr_st
 ################################################################################
 
 
-class HasCriticalDensity_Test:
+class CriticalDensity_Test:
     def test_wrapper_is_compliant(self, wrapper):
         """Test that AstropyCosmology is a BackgroundCosmologyWrapper."""
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        assert isinstance(wrapper, HasCriticalDensity)
+        assert isinstance(wrapper, CriticalDensity)
 
     def test_critical_density0(self, wrapper, cosmo):
         """
@@ -45,13 +45,13 @@ class HasCriticalDensity_Test:
         assert isinstance(rho, np.ndarray)
 
 
-class HasHubbleParameter_Test:
+class HubbleParameter_Test:
     def test_wrapper_is_compliant(self, wrapper):
         """Test that AstropyCosmology is a BackgroundCosmologyWrapper."""
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        assert isinstance(wrapper, HasHubbleParameter)
+        assert isinstance(wrapper, HubbleParameter)
 
     def test_H0(self, wrapper, cosmo):
         """Test that the wrapper has the same H0 as the wrapped object."""
@@ -77,8 +77,8 @@ class HasHubbleParameter_Test:
         assert isinstance(H, np.ndarray)
 
     @given(z_arr_st(min_value=0, max_value=1e10))
-    def test_h_over_h0(self, wrapper, vcosmo, z):
+    def test_H_over_H0(self, wrapper, vcosmo, z):
         """Test that the wrapper's efunc is the same as the wrapped object's."""
-        e = wrapper.h_over_h0(z)
+        e = wrapper.H_over_H0(z)
         assert np.array_equal(e, vcosmo.Hubble(z) / vcosmo.Hubble(0))
         assert isinstance(e, np.ndarray)

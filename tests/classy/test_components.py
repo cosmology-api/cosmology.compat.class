@@ -7,14 +7,14 @@ import pytest
 from hypothesis import given
 
 from cosmology.api import (
-    HasBaryonComponent,
-    HasDarkEnergyComponent,
-    HasDarkMatterComponent,
-    HasGlobalCurvatureComponent,
-    HasMatterComponent,
-    HasNeutrinoComponent,
-    HasPhotonComponent,
-    HasTotalComponent,
+    BaryonComponent,
+    CurvatureComponent,
+    DarkEnergyComponent,
+    DarkMatterComponent,
+    MatterComponent,
+    NeutrinoComponent,
+    PhotonComponent,
+    TotalComponent,
 )
 
 from .conftest import z_arr_st
@@ -24,13 +24,13 @@ from .conftest import z_arr_st
 ################################################################################
 
 
-class HasTotalComponent_Test:
+class TotalComponent_Test:
     def test_wrapper_is_compliant(self, wrapper):
         """Test that AstropyCosmology is a BackgroundCosmologyWrapper."""
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        assert isinstance(wrapper, HasTotalComponent)
+        assert isinstance(wrapper, TotalComponent)
 
     def test_Omega_tot0(self, wrapper, cosmo):
         """Test that the wrapper has the same Otot0 as the wrapped object."""
@@ -46,13 +46,13 @@ class HasTotalComponent_Test:
         assert isinstance(omega, np.ndarray)
 
 
-class HasGlobalCurvatureComponent_Test:
+class CurvatureComponent_Test:
     def test_wrapper_is_compliant(self, wrapper):
         """Test that AstropyCosmology is a BackgroundCosmologyWrapper."""
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        assert isinstance(wrapper, HasGlobalCurvatureComponent)
+        assert isinstance(wrapper, CurvatureComponent)
 
     def test_Omega_k0(self, wrapper, cosmo):
         """Test that the wrapper has the same Omega_k0 as the wrapped object."""
@@ -68,13 +68,13 @@ class HasGlobalCurvatureComponent_Test:
         assert isinstance(omega, np.ndarray)
 
 
-class HasMatterComponent_Test:
+class MatterComponent_Test:
     def test_wrapper_is_compliant(self, wrapper):
         """Test that AstropyCosmology is a BackgroundCosmologyWrapper."""
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        assert isinstance(wrapper, HasMatterComponent)
+        assert isinstance(wrapper, MatterComponent)
 
     def test_Omega_m0(self, wrapper, cosmo):
         """Test that the wrapper has the same Om0 as the wrapped object."""
@@ -89,13 +89,13 @@ class HasMatterComponent_Test:
         assert isinstance(omega, np.ndarray)
 
 
-class HasBaryonComponent_Test:
+class BaryonComponent_Test:
     def test_wrapper_is_compliant(self, wrapper):
         """Test that AstropyCosmology is a BackgroundCosmologyWrapper."""
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        assert isinstance(wrapper, HasBaryonComponent)
+        assert isinstance(wrapper, BaryonComponent)
 
     def test_Omega_b0(self, wrapper, cosmo):
         """Test that the wrapper has the same Omega_b0 as the wrapped object."""
@@ -110,7 +110,7 @@ class HasBaryonComponent_Test:
         assert isinstance(omega, np.ndarray)
 
 
-class HasNeutrinoComponent_Test:
+class NeutrinoComponent_Test:
     def test_wrapper_is_compliant(self, wrapper):
         """Test that AstropyCosmology is a BackgroundCosmologyWrapper."""
         if hasattr(super(), "test_wrapper_is_compliant"):
@@ -118,7 +118,7 @@ class HasNeutrinoComponent_Test:
 
         # FIXME: this should be an instance
         with pytest.raises(NotImplementedError):
-            assert isinstance(wrapper, HasNeutrinoComponent)
+            assert isinstance(wrapper, NeutrinoComponent)
 
     @pytest.mark.xfail(reason="TODO")
     def test_Omega_nu0(self, wrapper, cosmo):
@@ -144,13 +144,13 @@ class HasNeutrinoComponent_Test:
         assert isinstance(omega, np.ndarray)
 
 
-class HasDarkEnergyComponent_Test:
+class DarkEnergyComponent_Test:
     def test_wrapper_is_compliant(self, wrapper):
         """Test that AstropyCosmology is a BackgroundCosmologyWrapper."""
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        assert isinstance(wrapper, HasDarkEnergyComponent)
+        assert isinstance(wrapper, DarkEnergyComponent)
 
     def test_Omega_de0(self, wrapper, cosmo):
         """Test that the wrapper has the same Omega_de0 as the wrapped object."""
@@ -166,14 +166,14 @@ class HasDarkEnergyComponent_Test:
         assert isinstance(omega, np.ndarray)
 
 
-class HasDarkMatterComponent_Test:
+class DarkMatterComponent_Test:
     def test_wrapper_is_compliant(self, wrapper):
         """Test that AstropyCosmology is a BackgroundCosmologyWrapper."""
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        # FIXME: should be a HasDarkMatterComponent instance
-        assert isinstance(wrapper, HasDarkMatterComponent)
+        # FIXME: should be a DarkMatterComponent instance
+        assert isinstance(wrapper, DarkMatterComponent)
 
     def test_Omega_dm0(self, wrapper, cosmo):
         """Test that the wrapper has the same Omega_dm0 as the wrapped object."""
@@ -189,13 +189,13 @@ class HasDarkMatterComponent_Test:
         assert isinstance(omega, np.ndarray)
 
 
-class HasPhotonComponent_Test:
+class PhotonComponent_Test:
     def test_wrapper_is_compliant(self, wrapper):
         """Test that AstropyCosmology is a BackgroundCosmologyWrapper."""
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        assert isinstance(wrapper, HasPhotonComponent)
+        assert isinstance(wrapper, PhotonComponent)
 
     def test_Omega_gamma0(self, wrapper, cosmo):
         """Test that the wrapper has the same Omega_gamma0 as the wrapped object."""
