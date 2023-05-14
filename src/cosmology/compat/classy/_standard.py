@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, overload
 
 import numpy as np
 from numpy import vectorize
 
 from cosmology.compat.classy import constants
-from cosmology.compat.classy._core import CosmologyWrapper, InputT, NDFloating
+from cosmology.compat.classy._core import Array, CosmologyWrapper, InputT
 
 __all__: list[str] = []
 
@@ -46,7 +46,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     # HasTotalComponent
 
     @property
-    def Omega_tot0(self) -> NDFloating:
+    def Omega_tot0(self) -> Array:
         r"""Omega total; the total density/critical density at z=0.
 
         Note this should alway be 1.
@@ -63,7 +63,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
             + self.cosmo.Omega_r()
         )
 
-    def Omega_tot(self, z: InputT, /) -> NDFloating:
+    def Omega_tot(self, z: InputT, /) -> Array:
         r"""Redshift-dependent total density parameter.
 
         This is the sum of the matter, radiation, neutrino, dark energy, and
@@ -81,11 +81,11 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     # HasGlobalCurvatureComponent
 
     @property
-    def Omega_k0(self) -> NDFloating:
+    def Omega_k0(self) -> Array:
         """Omega curvature; the effective curvature density/critical density at z=0."""
         return np.asarray(self.cosmo.Omega0_k())
 
-    def Omega_k(self, z: InputT, /) -> NDFloating:
+    def Omega_k(self, z: InputT, /) -> Array:
         """Redshift-dependent curvature density parameter."""
         raise NotImplementedError
 
@@ -93,11 +93,11 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     # HasMatterComponent
 
     @property
-    def Omega_m0(self) -> NDFloating:
+    def Omega_m0(self) -> Array:
         """Matter density at z=0."""
         return np.asarray(self.cosmo.Omega_m())
 
-    def Omega_m(self, z: InputT, /) -> NDFloating:
+    def Omega_m(self, z: InputT, /) -> Array:
         """Redshift-dependent non-relativistic matter density parameter.
 
         Notes
@@ -111,11 +111,11 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     # HasBaryonComponent
 
     @property
-    def Omega_b0(self) -> NDFloating:
+    def Omega_b0(self) -> Array:
         """Baryon density at z=0."""
         return np.asarray(self.cosmo.Omega_b())
 
-    def Omega_b(self, z: InputT, /) -> NDFloating:
+    def Omega_b(self, z: InputT, /) -> Array:
         """Redshift-dependent baryon density parameter.
 
         Raises
@@ -129,21 +129,21 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     # HasNeutrinoComponent
 
     @property
-    def Omega_nu0(self) -> NDFloating:
+    def Omega_nu0(self) -> Array:
         """Omega nu; the density/critical density of neutrinos at z=0."""
         raise NotImplementedError
 
     @property
-    def Neff(self) -> NDFloating:
+    def Neff(self) -> Array:
         """Effective number of neutrino species."""
         return np.asarray(self.cosmo.Neff())
 
     @property
-    def m_nu(self) -> tuple[NDFloating, ...]:
+    def m_nu(self) -> tuple[Array, ...]:
         """Neutrino mass in eV."""
         raise NotImplementedError
 
-    def Omega_nu(self, z: InputT, /) -> NDFloating:
+    def Omega_nu(self, z: InputT, /) -> Array:
         r"""Redshift-dependent neutrino density parameter."""
         raise NotImplementedError
 
@@ -151,11 +151,11 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     # HasDarkEnergyComponent
 
     @property
-    def Omega_de0(self) -> NDFloating:
+    def Omega_de0(self) -> Array:
         """Dark energy density at z=0."""
         return np.asarray(self.cosmo.Omega_Lambda())
 
-    def Omega_de(self, z: InputT, /) -> NDFloating:
+    def Omega_de(self, z: InputT, /) -> Array:
         """Redshift-dependent dark energy density parameter."""
         raise NotImplementedError
 
@@ -163,11 +163,11 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     # HasDarkMatterComponent
 
     @property
-    def Omega_dm0(self) -> NDFloating:
+    def Omega_dm0(self) -> Array:
         """Omega dark matter; dark matter density/critical density at z=0."""
         return np.asarray(self.cosmo.Omega0_cdm())
 
-    def Omega_dm(self, z: InputT, /) -> NDFloating:
+    def Omega_dm(self, z: InputT, /) -> Array:
         """Redshift-dependent dark matter density parameter.
 
         Notes
@@ -181,49 +181,49 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     # HasPhotonComponent
 
     @property
-    def Omega_gamma0(self) -> NDFloating:
+    def Omega_gamma0(self) -> Array:
         """Omega gamma; the density/critical density of photons at z=0."""
         return np.asarray(self.cosmo.Omega_g())
 
-    def Omega_gamma(self, z: InputT, /) -> NDFloating:
+    def Omega_gamma(self, z: InputT, /) -> Array:
         """Redshift-dependent photon density parameter."""
-        return self.Omega_gamma0 * (z + 1.0) ** 4 / self.h_over_h0(z) ** 2
+        return self.Omega_gamma0 * (z + 1.0) ** 4 / self.H_over_H0(z) ** 2
 
     # ----------------------------------------------
-    # HasCriticalDensity
+    # CriticalDensity
 
     @property
-    def critical_density0(self) -> NDFloating:
+    def critical_density0(self) -> Array:
         """Critical density at z = 0 in Msol Mpc-3."""
         return np.array(3e6 * self.H0**2 / (8 * np.pi * constants.G))
 
-    def critical_density(self, z: InputT, /) -> NDFloating:
+    def critical_density(self, z: InputT, /) -> Array:
         """Redshift-dependent critical density in Msol Mpc-3."""
         return np.array(3e6 * self.H(z) ** 2 / (8 * np.pi * constants.G))
 
     # ----------------------------------------------
-    # HasHubbleParameter
+    # HubbleParameter
 
     @property
-    def H0(self) -> NDFloating:
+    def H0(self) -> Array:
         """Hubble constant at z=0 in km s-1 Mpc-1."""
         return np.array(constants.c * self.cosmo.Hubble(0))
 
     @property
-    def hubble_distance(self) -> NDFloating:
+    def hubble_distance(self) -> Array:
         """Hubble distance in Mpc."""
         return np.array(1 / self.cosmo.Hubble(0))
 
     @property
-    def hubble_time(self) -> NDFloating:
+    def hubble_time(self) -> Array:
         """Hubble time in Gyr."""
         return np.array(_MPCS_KM_TO_GYR / self.H0)
 
-    def H(self, z: InputT, /) -> NDFloating:
+    def H(self, z: InputT, /) -> Array:
         """Hubble function :math:`H(z)` in km s-1 Mpc-1."""  # noqa: D402
         return np.array(constants.c * self._cosmo_fn["Hubble"](z))
 
-    def h_over_h0(self, z: InputT, /) -> NDFloating:
+    def H_over_H0(self, z: InputT, /) -> Array:
         """Standardised Hubble function :math:`E(z) = H(z)/H_0`."""
         return self._cosmo_fn["Hubble"](z) / self.cosmo.Hubble(0)
 
@@ -231,11 +231,11 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     # Scale factor
 
     @property
-    def scale_factor0(self) -> NDFloating:
+    def scale_factor0(self) -> Array:
         """Scale factor at z=0."""
         return np.asarray(1.0)
 
-    def scale_factor(self, z: InputT, /) -> NDFloating:
+    def scale_factor(self, z: InputT, /) -> Array:
         """Redshift-dependenct scale factor :math:`a = a_0 / (1 + z)`."""
         return np.asarray(self.scale_factor0 / (z + 1))
 
@@ -243,56 +243,92 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     # Temperature
 
     @property
-    def Tcmb0(self) -> NDFloating:
+    def T_cmb0(self) -> Array:
         """Temperature of the CMB at z=0."""
         return np.asarray(self.cosmo.T_cmb())
 
-    def Tcmb(self, z: InputT, /) -> NDFloating:
+    def T_cmb(self, z: InputT, /) -> Array:
         """Temperature of the CMB at redshift ``z``."""
-        return self.Tcmb0 * (z + 1)
+        return self.T_cmb0 * (z + 1)
 
     # ----------------------------------------------
     # Time
 
-    def age(self, z: InputT, /) -> NDFloating:
+    def age(self, z: InputT, /) -> Array:
         """Age of the universe in Gyr at redshift ``z``."""
-        raise NotImplementedError
-
-    def lookback_time(self, z: InputT, /) -> NDFloating:
-        """Lookback time to redshift ``z`` in Gyr.
-
-        The lookback time is the difference between the age of the Universe now
-        and the age at redshift ``z``.
-        """
         raise NotImplementedError
 
     # ----------------------------------------------
     # Comoving distance
 
-    def comoving_distance(self, z: InputT, /) -> NDFloating:
+    @overload
+    def comoving_distance(self, z: InputT, /) -> Array:
+        ...
+
+    @overload
+    def comoving_distance(self, z1: InputT, z2: InputT, /) -> Array:
+        ...
+
+    def comoving_distance(self, z1: InputT, z2: InputT | None = None, /) -> Array:
         r"""Comoving line-of-sight distance :math:`d_c(z)` in Mpc.
 
         The comoving distance along the line-of-sight between two objects
         remains constant with time for objects in the Hubble flow.
+
+        Parameters
+        ----------
+        z : Array, positional-only
+        z1, z2 : Array, positional-only
+            Input redshifts. If one argument ``z`` is given, the distance
+            :math:`d_c(0, z)` is returned. If two arguments ``z1, z2`` are
+            given, the distance :math:`d_c(z_1, z_2)` is returned.
+
+        Returns
+        -------
+        Array
+            The comoving distance :math:`d_c` in Mpc.
         """
         raise NotImplementedError
 
-    def comoving_transverse_distance(self, z: InputT, /) -> NDFloating:
+    @overload
+    def transverse_comoving_distance(self, z: InputT, /) -> Array:
+        ...
+
+    @overload
+    def transverse_comoving_distance(self, z1: InputT, z2: InputT, /) -> Array:
+        ...
+
+    def transverse_comoving_distance(
+        self, z1: InputT, z2: InputT | None = None, /
+    ) -> Array:
         r"""Transverse comoving distance :math:`d_M(z)` in Mpc.
 
         This value is the transverse comoving distance at redshift ``z``
         corresponding to an angular separation of 1 radian. This is the same as
         the comoving distance if :math:`\Omega_k` is zero (as in the current
         concordance Lambda-CDM model).
+
+        Parameters
+        ----------
+        z : Array, positional-only
+        z1, z2 : Array, positional-only
+            Input redshifts. If one argument ``z`` is given, the distance
+            :math:`d_M(0, z)` is returned. If two arguments ``z1, z2`` are
+            given, the distance :math:`d_M(z_1, z_2)` is returned.
+
+        Returns
+        -------
+        Array
+            The comoving transverse distance :math:`d_M` in Mpc.
         """
         raise NotImplementedError
 
-    def _comoving_volume_flat(self, z: InputT, /) -> NDFloating:
+    def _comoving_volume_flat(self, z: InputT, /) -> Array:
         return 4.0 / 3.0 * np.pi * self.comoving_distance(z) ** 3
 
-    def _comoving_volume_positive(self, z: InputT, /) -> NDFloating:
+    def _comoving_volume_positive(self, z: InputT, /) -> Array:
         dh = self.hubble_distance
-        x = self.comoving_transverse_distance(z) / dh
+        x = self.transverse_comoving_distance(z) / dh
         term1 = 4.0 * np.pi * dh**3 / (2.0 * self.Omega_k0)
         term2 = x * np.sqrt(1 + self.Omega_k0 * (x) ** 2)
         term3 = np.sqrt(np.abs(self.Omega_k0)) * x
@@ -301,30 +337,41 @@ class StandardCosmologyWrapper(CosmologyWrapper):
             term2 - 1.0 / np.sqrt(np.abs(self.Omega_k0)) * np.arcsinh(term3)
         )
 
-    def _comoving_volume_negative(self, z: InputT, /) -> NDFloating:
+    def _comoving_volume_negative(self, z: InputT, /) -> Array:
         dh = self.hubble_distance
-        x = self.comoving_transverse_distance(z) / dh
+        x = self.transverse_comoving_distance(z) / dh
         term1 = 4.0 * np.pi * dh**3 / (2.0 * self.Omega_k0)
         term2 = x * np.sqrt(1 + self.Omega_k0 * (x) ** 2)
         term3 = np.sqrt(np.abs(self.Omega_k0)) * x
         return term1 * (term2 - 1.0 / np.sqrt(np.abs(self.Omega_k0)) * np.arcsin(term3))
 
-    def comoving_volume(self, z: InputT, /) -> NDFloating:
+    @overload
+    def comoving_volume(self, z: InputT, /) -> Array:
+        ...
+
+    @overload
+    def comoving_volume(self, z1: InputT, z2: InputT, /) -> Array:
+        ...
+
+    def comoving_volume(self, z1: InputT, z2: InputT | None = None, /) -> Array:
         r"""Comoving volume in cubic Mpc.
 
         This is the volume of the universe encompassed by redshifts less than
         ``z``. For the case of :math:`\Omega_k = 0` it is a sphere of radius
         `comoving_distance` but it is less intuitive if :math:`\Omega_k` is not.
         """
+        if z2 is not None:
+            raise NotImplementedError
+
         if self.Omega_k0 == 0:
-            cv = self._comoving_volume_flat(z)
+            cv = self._comoving_volume_flat(z1)
         elif self.Omega_k0 > 0:
-            cv = self._comoving_volume_positive(z)
+            cv = self._comoving_volume_positive(z1)
         else:
-            cv = self._comoving_volume_negative(z)
+            cv = self._comoving_volume_negative(z1)
         return cv
 
-    def differential_comoving_volume(self, z: InputT, /) -> NDFloating:
+    def differential_comoving_volume(self, z: InputT, /) -> Array:
         r"""Differential comoving volume in cubic Mpc per steradian.
 
         If :math:`V_c` is the comoving volume of a redshift slice with solid
@@ -339,18 +386,164 @@ class StandardCosmologyWrapper(CosmologyWrapper):
 
         """
         return (
-            self.comoving_transverse_distance(z) / self.hubble_distance
-        ) ** 2 / self.h_over_h0(z)
+            self.transverse_comoving_distance(z) / self.hubble_distance
+        ) ** 2 / self.H_over_H0(z)
 
     # ----------------------------------------------
-    # Angular diameter distance
+    # Proper
 
-    def angular_diameter_distance(self, z: InputT, /) -> NDFloating:
-        """Angular diameter distance :math:`d_A(z)` in Mpc.
+    @overload
+    def proper_distance(self, z: InputT, /) -> Array:
+        ...
 
-        This gives the proper (sometimes called 'physical') transverse
-        distance corresponding to an angle of 1 radian for an object
-        at redshift ``z`` ([1]_, [2]_, [3]_).
+    @overload
+    def proper_distance(self, z1: InputT, z2: InputT, /) -> Array:
+        ...
+
+    def proper_distance(self, z1: InputT, z2: InputT | None = None, /) -> Array:
+        r"""Proper distance :math:`d` in Mpc.
+
+        The proper distance is the distance between two objects at redshifts
+        ``z1`` and ``z2``, including the effects of the expansion of the
+        universe.
+
+        Parameters
+        ----------
+        z : Array, positional-only
+        z1, z2 : Array, positional-only
+            Input redshifts. If one argument ``z`` is given, the distance
+            :math:`d(0, z)` is returned. If two arguments ``z1, z2`` are
+            given, the distance :math:`d(z_1, z_2)` is returned.
+
+        Returns
+        -------
+        Array
+            The proper distance :math:`d` in Mpc.
+        """
+        raise NotImplementedError
+
+    @overload
+    def proper_time(self, z: InputT, /) -> Array:
+        ...
+
+    @overload
+    def proper_time(self, z1: InputT, z2: InputT, /) -> Array:
+        ...
+
+    def proper_time(self, z1: InputT, z2: InputT | None = None, /) -> Array:
+        r"""Proper time :math:`t` in Gyr.
+
+        The proper time is the proper distance divided by
+        :attr:`~cosmology.api.CosmologyConstantsNamespace.c`.
+
+        Parameters
+        ----------
+        z : Array, positional-only
+        z1, z2 : Array, positional-only
+            Input redshifts. If one argument ``z`` is given, the time
+            :math:`t(0, z)` is returned. If two arguments ``z1, z2`` are
+            given, the time :math:`t(z_1, z_2)` is returned.
+
+        Returns
+        -------
+        Array
+            The proper time :math:`t` in Gyr.
+        """
+        raise NotImplementedError
+
+    # ----------------------------------------------
+
+    @overload
+    def lookback_distance(self, z: InputT, /) -> Array:
+        ...
+
+    @overload
+    def lookback_distance(self, z1: InputT, z2: InputT, /) -> Array:
+        ...
+
+    def lookback_distance(self, z1: InputT, z2: InputT | None = None, /) -> Array:
+        r"""Lookback distance :math:`d_T` in Mpc.
+
+        The lookback distance is the subjective distance it took light to travel
+        from redshift ``z1`` to  ``z2``.
+
+        Parameters
+        ----------
+        z : Array, positional-only
+        z1, z2 : Array, positional-only
+            Input redshifts. If one argument ``z`` is given, the distance
+            :math:`d_T(0, z)` is returned. If two arguments ``z1, z2`` are
+            given, the distance :math:`d_T(z_1, z_2)` is returned.
+
+        Returns
+        -------
+        Array
+            The lookback distance :math:`d_T` in Mpc.
+        """
+        raise NotImplementedError
+
+    @overload
+    def lookback_time(self, z: InputT, /) -> Array:
+        ...
+
+    @overload
+    def lookback_time(self, z1: InputT, z2: InputT, /) -> Array:
+        ...
+
+    def lookback_time(self, z1: InputT, z2: InputT | None = None, /) -> Array:
+        """Lookback time in Gyr.
+
+        The lookback time is the time that it took light from being emitted at
+        one redshift to being observed at another redshift. Effectively it is the
+        difference between the age of the Universe at the two redshifts.
+
+        Parameters
+        ----------
+        z : Array, positional-only
+        z1, z2 : Array, positional-only
+            Input redshifts. If one argument ``z`` is given, the time
+            :math:`t_T(0, z)` is returned. If two arguments ``z1, z2`` are
+            given, the time :math:`t_T(z_1, z_2)` is returned.
+
+        Returns
+        -------
+        Array
+            The lookback time in Gyr.
+        """
+        raise NotImplementedError
+
+    # ----------------------------------------------
+    # Angular diameter
+
+    @overload
+    def angular_diameter_distance(self, z: InputT, /) -> Array:
+        ...
+
+    @overload
+    def angular_diameter_distance(self, z1: InputT, z2: InputT, /) -> Array:
+        ...
+
+    def angular_diameter_distance(
+        self, z1: InputT, z2: InputT | None = None, /
+    ) -> Array:
+        """Angular diameter distance :math:`d_A` in Mpc.
+
+        This gives the proper (sometimes called 'physical') transverse distance
+        corresponding to an angle of 1 radian for an object at redshift ``z``
+        ([1]_, [2]_, [3]_).
+
+        Parameters
+        ----------
+        z : Array, positional-only
+        z1, z2 : Array, positional-only
+            Input redshifts. If one argument ``z`` is given, the distance
+            :math:`d_A(0, z)` is returned. If two arguments ``z1, z2`` are
+            given, the distance :math:`d_A(z_1, z_2)` is returned.
+
+        Returns
+        -------
+        Array
+            The angular diameter distance :math:`d_A` in Mpc.
 
         References
         ----------
@@ -358,19 +551,44 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         .. [2] Weedman, D. (1986). Quasar astronomy, pp 65-67.
         .. [3] Peebles, P. (1993). Principles of Physical Cosmology, pp 325-327.
         """
-        return np.asarray(self._cosmo_fn["angular_distance"](z))
+        if z2 is not None:
+            raise NotImplementedError
+        return np.asarray(self._cosmo_fn["angular_distance"](z1))
 
     # ----------------------------------------------
     # Luminosity distance
 
-    def luminosity_distance(self, z: InputT, /) -> NDFloating:
-        """Redshift-dependent luminosity distance in Mpc.
+    @overload
+    def luminosity_distance(self, z: InputT, /) -> Array:
+        ...
+
+    @overload
+    def luminosity_distance(self, z1: InputT, z2: InputT, /) -> Array:
+        ...
+
+    def luminosity_distance(self, z1: InputT, z2: InputT | None = None, /) -> Array:
+        """Redshift-dependent luminosity distance :math:`d_L` in Mpc.
 
         This is the distance to use when converting between the bolometric flux
         from an object at redshift ``z`` and its bolometric luminosity [1]_.
+
+        Parameters
+        ----------
+        z : Array, positional-only
+        z1, z2 : Array, positional-only
+            Input redshifts. If one argument ``z`` is given, the distance
+            :math:`d_L(0, z)` is returned. If two arguments ``z1, z2`` are
+            given, the distance :math:`d_L(z_1, z_2)` is returned.
+
+        Returns
+        -------
+        Array
+            The luminosity distance :math:`d_L` in Mpc.
 
         References
         ----------
         .. [1] Weinberg, 1972, pp 420-424; Weedman, 1986, pp 60-62.
         """
-        return np.asarray(self._cosmo_fn["luminosity_distance"](z))
+        if z2 is not None:
+            raise NotImplementedError
+        return np.asarray(self._cosmo_fn["luminosity_distance"](z1))
