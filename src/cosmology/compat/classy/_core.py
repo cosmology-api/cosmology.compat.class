@@ -18,12 +18,12 @@ if TYPE_CHECKING:
     from typing_extensions import TypeAlias
 
 
-NDFloating: TypeAlias = NDArray[floating[Any]]
-InputT: TypeAlias = Union[NDFloating, float]
+Array: TypeAlias = NDArray[floating[Any]]
+InputT: TypeAlias = Union[Array, float]
 
 
 @dataclass(frozen=True)
-class CosmologyWrapper(CosmologyWrapperAPI[NDFloating, InputT]):
+class CosmologyWrapper(CosmologyWrapperAPI[Array, InputT]):
     """The Cosmology API wrapper for :mod:`classy`."""
 
     cosmo: classy.Class
