@@ -7,6 +7,7 @@ from typing import Any, overload
 
 import numpy as np
 from numpy import vectorize
+from scipy.interpolate import InterpolatedUnivariateSpline
 
 from cosmology.compat.classy import constants
 from cosmology.compat.classy._core import Array, CosmologyWrapper, InputT
@@ -30,6 +31,8 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         """
         super().__post_init__()
 
+        bkg = self.cosmo.get_background()
+
         self._cosmo_fn: dict[str, Any]
         object.__setattr__(
             self,
@@ -39,6 +42,13 @@ class StandardCosmologyWrapper(CosmologyWrapper):
                 "Hubble": vectorize(self.cosmo.Hubble),
                 "angular_distance": vectorize(self.cosmo.angular_distance),
                 "luminosity_distance": vectorize(self.cosmo.luminosity_distance),
+                "comoving_distance": InterpolatedUnivariateSpline(
+                    bkg["z"][::-1],
+                    bkg["comov. dist."][::-1],
+                    k=3,
+                    ext=2,
+                    check_finite=True,
+                ),
             },
         )
 
@@ -288,7 +298,10 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         Array
             The comoving distance :math:`d_c` in Mpc.
         """
-        raise NotImplementedError
+        z1, z2 = (0, z1) if z2 is None else (z1, z2)
+        return self._cosmo_fn["comoving_distance"](z2) - self._cosmo_fn[
+            "comoving_distance"
+        ](z1)
 
     @overload
     def transverse_comoving_distance(self, z: InputT, /) -> Array:
