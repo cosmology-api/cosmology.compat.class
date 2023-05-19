@@ -57,3 +57,5 @@ repos:
         args:
           - --strict
           - --allow-subclassing-any
+        additional_dependencies:
+          - cosmology.api
