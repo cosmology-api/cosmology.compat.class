@@ -64,10 +64,10 @@ class Test_StandardCosmologyWrapper(
         """Test that StandardCosmologyWrapper is a StandardCosmologyWrapper."""
         super().test_wrapper_is_compliant(wrapper)
 
-        # FIXME: it should be an instance
+        # TODO: it should be an instance
         with pytest.raises(NotImplementedError):
             assert isinstance(wrapper, StandardCosmology)
 
-        # FIXME: it should be an instance
+        # TODO: it should be an instance
         with pytest.raises(NotImplementedError):
             assert isinstance(wrapper, StandardCosmologyWrapperAPI)
