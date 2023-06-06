@@ -116,7 +116,7 @@ class NeutrinoComponent_Test:
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        # FIXME: this should be an instance
+        # TODO: this should be an instance
         with pytest.raises(NotImplementedError):
             assert isinstance(wrapper, NeutrinoComponent)
 
@@ -172,7 +172,7 @@ class DarkMatterComponent_Test:
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        # FIXME: should be a DarkMatterComponent instance
+        # TODO: should be a DarkMatterComponent instance
         assert isinstance(wrapper, DarkMatterComponent)
 
     def test_Omega_dm0(self, wrapper, cosmo):
