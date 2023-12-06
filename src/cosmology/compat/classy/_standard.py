@@ -53,7 +53,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         )
 
     # ----------------------------------------------
-    # HasTotalComponent
+    # TotalComponent
 
     @property
     def Omega_tot0(self) -> Array:
@@ -88,7 +88,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         #  Basically just return np.ones_like(z)
 
     # ----------------------------------------------
-    # HasGlobalCurvatureComponent
+    # CurvatureComponent
 
     @property
     def Omega_k0(self) -> Array:
@@ -100,7 +100,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         raise NotImplementedError
 
     # ----------------------------------------------
-    # HasMatterComponent
+    # MatterComponent
 
     @property
     def Omega_m0(self) -> Array:
@@ -118,7 +118,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         return np.asarray(self._cosmo_fn["Om_m"](z))
 
     # ----------------------------------------------
-    # HasBaryonComponent
+    # BaryonComponent
 
     @property
     def Omega_b0(self) -> Array:
@@ -136,7 +136,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         raise NotImplementedError
 
     # ----------------------------------------------
-    # HasNeutrinoComponent
+    # NeutrinoComponent
 
     @property
     def Omega_nu0(self) -> Array:
@@ -158,7 +158,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         raise NotImplementedError
 
     # ----------------------------------------------
-    # HasDarkEnergyComponent
+    # DarkEnergyComponent
 
     @property
     def Omega_de0(self) -> Array:
@@ -170,7 +170,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         raise NotImplementedError
 
     # ----------------------------------------------
-    # HasDarkMatterComponent
+    # DarkMatterComponent
 
     @property
     def Omega_dm0(self) -> Array:
@@ -188,7 +188,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         raise NotImplementedError
 
     # ----------------------------------------------
-    # HasPhotonComponent
+    # PhotonComponent
 
     @property
     def Omega_gamma0(self) -> Array:

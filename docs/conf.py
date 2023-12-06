@@ -61,7 +61,6 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
-    "sphinx_automodapi.automodapi",
     "matplotlib.sphinxext.plot_directive",
     "numpydoc",
     "pytest_doctestplus.sphinx.doctestplus",
