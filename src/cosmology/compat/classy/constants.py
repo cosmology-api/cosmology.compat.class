@@ -6,7 +6,6 @@ From the :mod:`cosmology.api`, the list of required constants is:
 - G: Gravitational constant G in pc km2 s-2 Msol-1.
 """
 
-
 import numpy as np
 
 from cosmology.compat.classy._core import Array

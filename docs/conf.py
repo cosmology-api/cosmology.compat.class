@@ -5,7 +5,6 @@ list see the documentation:
 https://www.sphinx-doc.org/en/master/usage/configuration.html
 """
 
-
 import pathlib
 import sys
 from importlib import import_module
@@ -23,6 +22,7 @@ def get_authors() -> set[str]:
     -------
     set[str]
         The authors.
+
     """
     authors: set[str] = set()
     cfg = pathlib.Path(__file__).parent.parent / "pyproject.toml"
