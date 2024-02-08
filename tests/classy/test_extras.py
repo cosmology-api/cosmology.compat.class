@@ -28,9 +28,7 @@ class CriticalDensity_Test:
         Test that the wrapper's critical_density0 is the same as
         critical_density0.
         """
-        expect = (
-            3e6 * constants.c**2 * cosmo.Hubble(0) ** 2 / (8 * np.pi * constants.G)
-        )
+        expect = 3e6 * constants.c**2 * cosmo.Hubble(0) ** 2 / (8 * np.pi * constants.G)
         assert np.allclose(wrapper.critical_density0, expect)
         assert isinstance(wrapper.critical_density0, np.ndarray)
 

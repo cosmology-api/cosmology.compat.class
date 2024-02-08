@@ -114,6 +114,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         -----
         This does not include neutrinos, even if non-relativistic at the
         redshift of interest; see `Onu`.
+
         """
         return np.asarray(self._cosmo_fn["Om_m"](z))
 
@@ -132,6 +133,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         ------
         ValueError
             If ``Ob0`` is `None`.
+
         """
         raise NotImplementedError
 
@@ -184,6 +186,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         -----
         This does not include neutrinos, even if non-relativistic at the
         redshift of interest.
+
         """
         raise NotImplementedError
 
@@ -272,12 +275,10 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     # Comoving distance
 
     @overload
-    def comoving_distance(self, z: InputT, /) -> Array:
-        ...
+    def comoving_distance(self, z: InputT, /) -> Array: ...
 
     @overload
-    def comoving_distance(self, z1: InputT, z2: InputT, /) -> Array:
-        ...
+    def comoving_distance(self, z1: InputT, z2: InputT, /) -> Array: ...
 
     def comoving_distance(self, z1: InputT, z2: InputT | None = None, /) -> Array:
         r"""Comoving line-of-sight distance :math:`d_c(z)` in Mpc.
@@ -297,6 +298,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         -------
         Array
             The comoving distance :math:`d_c` in Mpc.
+
         """
         z1, z2 = (0, z1) if z2 is None else (z1, z2)
         return self._cosmo_fn["comoving_distance"](z2) - self._cosmo_fn[
@@ -304,12 +306,10 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         ](z1)
 
     @overload
-    def transverse_comoving_distance(self, z: InputT, /) -> Array:
-        ...
+    def transverse_comoving_distance(self, z: InputT, /) -> Array: ...
 
     @overload
-    def transverse_comoving_distance(self, z1: InputT, z2: InputT, /) -> Array:
-        ...
+    def transverse_comoving_distance(self, z1: InputT, z2: InputT, /) -> Array: ...
 
     def transverse_comoving_distance(
         self, z1: InputT, z2: InputT | None = None, /
@@ -333,6 +333,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         -------
         Array
             The comoving transverse distance :math:`d_M` in Mpc.
+
         """
         raise NotImplementedError
 
@@ -359,12 +360,10 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         return term1 * (term2 - 1.0 / np.sqrt(np.abs(self.Omega_k0)) * np.arcsin(term3))
 
     @overload
-    def comoving_volume(self, z: InputT, /) -> Array:
-        ...
+    def comoving_volume(self, z: InputT, /) -> Array: ...
 
     @overload
-    def comoving_volume(self, z1: InputT, z2: InputT, /) -> Array:
-        ...
+    def comoving_volume(self, z1: InputT, z2: InputT, /) -> Array: ...
 
     def comoving_volume(self, z1: InputT, z2: InputT | None = None, /) -> Array:
         r"""Comoving volume in cubic Mpc.
@@ -406,12 +405,10 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     # Proper
 
     @overload
-    def proper_distance(self, z: InputT, /) -> Array:
-        ...
+    def proper_distance(self, z: InputT, /) -> Array: ...
 
     @overload
-    def proper_distance(self, z1: InputT, z2: InputT, /) -> Array:
-        ...
+    def proper_distance(self, z1: InputT, z2: InputT, /) -> Array: ...
 
     def proper_distance(self, z1: InputT, z2: InputT | None = None, /) -> Array:
         r"""Proper distance :math:`d` in Mpc.
@@ -432,16 +429,15 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         -------
         Array
             The proper distance :math:`d` in Mpc.
+
         """
         raise NotImplementedError
 
     @overload
-    def proper_time(self, z: InputT, /) -> Array:
-        ...
+    def proper_time(self, z: InputT, /) -> Array: ...
 
     @overload
-    def proper_time(self, z1: InputT, z2: InputT, /) -> Array:
-        ...
+    def proper_time(self, z1: InputT, z2: InputT, /) -> Array: ...
 
     def proper_time(self, z1: InputT, z2: InputT | None = None, /) -> Array:
         r"""Proper time :math:`t` in Gyr.
@@ -461,18 +457,17 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         -------
         Array
             The proper time :math:`t` in Gyr.
+
         """
         raise NotImplementedError
 
     # ----------------------------------------------
 
     @overload
-    def lookback_distance(self, z: InputT, /) -> Array:
-        ...
+    def lookback_distance(self, z: InputT, /) -> Array: ...
 
     @overload
-    def lookback_distance(self, z1: InputT, z2: InputT, /) -> Array:
-        ...
+    def lookback_distance(self, z1: InputT, z2: InputT, /) -> Array: ...
 
     def lookback_distance(self, z1: InputT, z2: InputT | None = None, /) -> Array:
         r"""Lookback distance :math:`d_T` in Mpc.
@@ -492,16 +487,15 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         -------
         Array
             The lookback distance :math:`d_T` in Mpc.
+
         """
         raise NotImplementedError
 
     @overload
-    def lookback_time(self, z: InputT, /) -> Array:
-        ...
+    def lookback_time(self, z: InputT, /) -> Array: ...
 
     @overload
-    def lookback_time(self, z1: InputT, z2: InputT, /) -> Array:
-        ...
+    def lookback_time(self, z1: InputT, z2: InputT, /) -> Array: ...
 
     def lookback_time(self, z1: InputT, z2: InputT | None = None, /) -> Array:
         """Lookback time in Gyr.
@@ -522,6 +516,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         -------
         Array
             The lookback time in Gyr.
+
         """
         raise NotImplementedError
 
@@ -529,12 +524,10 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     # Angular diameter
 
     @overload
-    def angular_diameter_distance(self, z: InputT, /) -> Array:
-        ...
+    def angular_diameter_distance(self, z: InputT, /) -> Array: ...
 
     @overload
-    def angular_diameter_distance(self, z1: InputT, z2: InputT, /) -> Array:
-        ...
+    def angular_diameter_distance(self, z1: InputT, z2: InputT, /) -> Array: ...
 
     def angular_diameter_distance(
         self, z1: InputT, z2: InputT | None = None, /
@@ -563,6 +556,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         .. [1] Weinberg, 1972, pp 420-424; Weedman, 1986, pp 421-424.
         .. [2] Weedman, D. (1986). Quasar astronomy, pp 65-67.
         .. [3] Peebles, P. (1993). Principles of Physical Cosmology, pp 325-327.
+
         """
         if z2 is not None:
             raise NotImplementedError
@@ -572,12 +566,10 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     # Luminosity distance
 
     @overload
-    def luminosity_distance(self, z: InputT, /) -> Array:
-        ...
+    def luminosity_distance(self, z: InputT, /) -> Array: ...
 
     @overload
-    def luminosity_distance(self, z1: InputT, z2: InputT, /) -> Array:
-        ...
+    def luminosity_distance(self, z1: InputT, z2: InputT, /) -> Array: ...
 
     def luminosity_distance(self, z1: InputT, z2: InputT | None = None, /) -> Array:
         """Redshift-dependent luminosity distance :math:`d_L` in Mpc.
@@ -601,6 +593,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         References
         ----------
         .. [1] Weinberg, 1972, pp 420-424; Weedman, 1986, pp 60-62.
+
         """
         if z2 is not None:
             raise NotImplementedError
