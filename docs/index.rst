@@ -1,8 +1,8 @@
 ###########################################
-The Cosmology API CLASS Compatability Layer
+The Cosmology API CLASS compatibility Layer
 ###########################################
 
-Cosmology API Compatability Layer for CLASS.
+Cosmology API compatibility Layer for CLASS.
 
 
 Contributors
