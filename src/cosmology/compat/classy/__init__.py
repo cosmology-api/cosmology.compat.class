@@ -1,4 +1,4 @@
-"""The Cosmology API compatability library for :mod:`classy`.
+"""The Cosmology API compatibility library for :mod:`classy`.
 
 This library provides wrappers for CAMB cosmology objects to be compatible with
 the Cosmology API. The available wrappers are:

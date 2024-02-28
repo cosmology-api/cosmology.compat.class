@@ -1,4 +1,4 @@
 Cosmology-API CLASS-compatibility library
 =========================================
 
-Compatability library for CLASS.
+compatibility library for CLASS.

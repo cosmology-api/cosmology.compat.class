@@ -1,7 +1,7 @@
 [project]
   name = "cosmology.compat.classy"
   version = "0.1.0"
-  description = "Cosmology compatability library for CLASS"
+  description = "Cosmology compatibility library for CLASS"
   readme = "README.rst"
   requires-python = ">=3.9"
   license = {file = "LICENSE.txt"}
