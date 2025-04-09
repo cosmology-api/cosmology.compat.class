@@ -16,7 +16,7 @@ There are the following required objects for a Cosmology-API compatible library:
 from cosmology.compat.classy import constants
 from cosmology.compat.classy._standard import StandardCosmologyWrapper
 
-__all__ = [
+__all__ = [  # noqa: RUF022
     # Cosmology API
     "constants",
     # Wrappers

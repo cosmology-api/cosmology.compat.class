@@ -48,4 +48,4 @@ class CosmologyWrapper(CosmologyWrapperAPI[Array, InputT]):
         """Returns :class:`~cosmology.api.CosmologyNamespace` for CLASS."""
         import cosmology.compat.classy as namespace
 
-        return cast(CosmologyNamespace, namespace)
+        return cast("CosmologyNamespace", namespace)

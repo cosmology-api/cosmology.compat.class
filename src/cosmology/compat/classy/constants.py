@@ -10,7 +10,7 @@ import numpy as np
 
 from cosmology.compat.classy._core import Array
 
-__all__ = ["c", "G"]
+__all__ = ["G", "c"]
 
 c: Array = np.array(299792.458)  # [km s-1]
 # G: CODATA 2018 value
