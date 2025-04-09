@@ -1,4 +1,4 @@
-"""The Cosmology API compatability wrapper for CAMB."""
+"""The Cosmology API compatibility wrapper for CAMB."""
 
 from __future__ import annotations
 
