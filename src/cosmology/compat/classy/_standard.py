@@ -49,7 +49,6 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         m_nu_arr = () if m_nu is None else tuple(np.array(m_nu.split(","), dtype=float))
         object.__setattr__(self, "_m_nu", m_nu_arr)
 
-
         self._cosmo_fn: dict[str, Any]
         object.__setattr__(
             self,
@@ -73,7 +72,9 @@ class StandardCosmologyWrapper(CosmologyWrapper):
                     ext=2,
                     check_finite=True,
                 ),
-                "Omega_nu_interp": InterpolatedUnivariateSpline(z, Omega_nu_z[::-1], k=3)
+                "Omega_nu_interp": InterpolatedUnivariateSpline(
+                    z, Omega_nu_z[::-1], k=3
+                ),
             },
         )
 
@@ -178,11 +179,11 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     @property
     def m_nu(self) -> tuple[Array, ...]:
         """Neutrino mass in eV."""
-        return self._m_nu
+        return self._m_nu  # type: ignore[return-value]
 
     def Omega_nu(self, z: InputT, /) -> Array:
         r"""Redshift-dependent neutrino density parameter."""
-        return np.asarray(self._Omega_nu_interp(z))
+        return np.asarray(self._cosmo_fn["Omega_nu_interp"](z))
 
     # ----------------------------------------------
     # DarkEnergyComponent
