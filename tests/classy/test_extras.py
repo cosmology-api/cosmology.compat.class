@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 from hypothesis import given
 
-from cosmology.api import CriticalDensity, HubbleParameter
+from cosmology import api
 from cosmology.compat.classy import constants
 
 from .conftest import z_arr_st
@@ -21,7 +21,7 @@ class CriticalDensity_Test:
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        assert isinstance(wrapper, CriticalDensity)
+        assert isinstance(wrapper, api.CriticalDensity)
 
     def test_critical_density0(self, wrapper, cosmo):
         """
@@ -49,7 +49,7 @@ class HubbleParameter_Test:
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        assert isinstance(wrapper, HubbleParameter)
+        assert isinstance(wrapper, api.HubbleParameter)
 
     def test_H0(self, wrapper, cosmo):
         """Test that the wrapper has the same H0 as the wrapped object."""

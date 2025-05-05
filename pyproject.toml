@@ -4,7 +4,7 @@
   description = "Cosmology compatibility library for CLASS"
   readme = "README.rst"
   requires-python = ">=3.9"
-  license = {file = "LICENSE.txt"}
+  license = "BSD-3-Clause"
   keywords = ["cosmology", "CLASS"]
   authors = [
     {name = "Nathaniel Starkman", email = "n.starkman@mail.utoronto.ca"},
@@ -17,14 +17,13 @@
   classifiers = [
     "Intended Audience :: Science/Research",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
   ]
   dependencies = [
     "cosmology.api >= 0.1.0",
-    "cython>=3",
-    "classy>=3",
+    "Cython>=3",
+    "classy>=3.3",
     "typing_extensions>=3.7.4.2",
     "scipy>1.5",
   ]
@@ -64,6 +63,7 @@
     "setuptools>=45.0",
     "setuptools_scm[toml]>=6.3.1",
     "wheel",
+    "Cython>=3"
   ]
 
   build-backend = 'setuptools.build_meta'
@@ -136,9 +136,10 @@ where = ["src"]
 target-version = "py39"
 line-length = 88
 
+[tool.ruff.lint]
 select = ["ALL"]
 ignore = [
-  "ANN101", "ANN102", "ANN401",
+  "ANN401",
   "ARG001", "ARG002",
   "COM812",  # trailing-comma-missing
   "D105", "D107", "D203", "D213", "D401",
@@ -146,20 +147,20 @@ ignore = [
   "N802",
   "PD",
   "RET505", "RET506", "RET507",
-
   # (FIX)
   "FIX002",  # Found comment TODO
-
+  # Type-checking
+  "TC001",
   # flake8-todo (TD)
   "TD002",  # Missing author in TODO
   "TD003",  # Missing issue link on the line following this TODO
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "test_*.py" = ["ANN", "D", "N801", "N806", "S101", "SLF001"]
 "docs/*.py" = ["INP001"]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 known-third-party = [
   "classy",
   "numpy",

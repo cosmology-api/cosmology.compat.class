@@ -7,8 +7,7 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from cosmology.api import StandardCosmology
-from cosmology.api import StandardCosmologyWrapper as StandardCosmologyWrapperAPI
+from cosmology import api
 from cosmology.compat.classy import StandardCosmologyWrapper
 
 from .test_components import (
@@ -64,10 +63,5 @@ class Test_StandardCosmologyWrapper(
         """Test that StandardCosmologyWrapper is a StandardCosmologyWrapper."""
         super().test_wrapper_is_compliant(wrapper)
 
-        # TODO: it should be an instance
-        with pytest.raises(NotImplementedError):
-            assert isinstance(wrapper, StandardCosmology)
-
-        # TODO: it should be an instance
-        with pytest.raises(NotImplementedError):
-            assert isinstance(wrapper, StandardCosmologyWrapperAPI)
+        assert isinstance(wrapper, api.StandardCosmology)
+        assert isinstance(wrapper, api.StandardCosmologyWrapper)

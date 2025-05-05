@@ -49,6 +49,13 @@ class StandardCosmologyWrapper(CosmologyWrapper):
                     ext=2,
                     check_finite=True,
                 ),
+                "inv_comoving_distance": InterpolatedUnivariateSpline(
+                    bkg["comov. dist."][::-1],
+                    bkg["z"][::-1],
+                    k=3,
+                    ext=2,
+                    check_finite=True,
+                ),
             },
         )
 
@@ -233,7 +240,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         return np.array(_MPCS_KM_TO_GYR / self.H0)
 
     def H(self, z: InputT, /) -> Array:
-        """Hubble function :math:`H(z)` in km s-1 Mpc-1."""  # noqa: D402
+        """Hubble function :math:`H(z)` in km s-1 Mpc-1."""
         return np.array(constants.c * self._cosmo_fn["Hubble"](z))
 
     def H_over_H0(self, z: InputT, /) -> Array:
@@ -304,6 +311,25 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         return self._cosmo_fn["comoving_distance"](z2) - self._cosmo_fn[
             "comoving_distance"
         ](z1)
+
+    def inv_comoving_distance(self, dc: InputT, /) -> Array:
+        """Inverse comoving distance :math:`d_c^{-1}(d)` in Mpc^-1.
+
+        This is the inverse of the comoving distance function. It is used to
+        calculate the comoving distance from a given distance.
+
+        Parameters
+        ----------
+        dc : Array, positional-only
+            Input distances.
+
+        Returns
+        -------
+        Array
+            The inverse comoving distance :math:`d_c^{-1}` in Mpc^-1.
+
+        """
+        return self._cosmo_fn["inv_comoving_distance"](dc)
 
     @overload
     def transverse_comoving_distance(self, z: InputT, /) -> Array: ...
