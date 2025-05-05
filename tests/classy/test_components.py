@@ -59,7 +59,7 @@ class CurvatureComponent_Test:
         assert np.allclose(wrapper.Omega_k0, cosmo.Omega0_k())
         assert isinstance(wrapper.Omega_k0, np.ndarray)
 
-    @pytest.mark.xfail()
+    @pytest.mark.xfail
     @given(z_arr_st())
     def test_Omega_k(self, wrapper, vcosmo, z):
         """Test that the wrapper's Omega_k is the same as the wrapped object's."""

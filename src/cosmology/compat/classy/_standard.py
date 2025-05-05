@@ -233,7 +233,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         return np.array(_MPCS_KM_TO_GYR / self.H0)
 
     def H(self, z: InputT, /) -> Array:
-        """Hubble function :math:`H(z)` in km s-1 Mpc-1."""  # noqa: D402
+        """Hubble function :math:`H(z)` in km s-1 Mpc-1."""
         return np.array(constants.c * self._cosmo_fn["Hubble"](z))
 
     def H_over_H0(self, z: InputT, /) -> Array:
