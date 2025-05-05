@@ -5,8 +5,7 @@ from types import SimpleNamespace
 import classy
 import pytest
 
-from cosmology.api import Cosmology as CosmologyAPI
-from cosmology.api import CosmologyWrapper as CosmologyWrapperAPI
+from cosmology import api
 from cosmology.compat.classy._core import CosmologyWrapper
 
 ################################################################################
@@ -37,8 +36,8 @@ class Test_CosmologyWrapper:
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        assert isinstance(wrapper, CosmologyAPI)
-        assert isinstance(wrapper, CosmologyWrapperAPI)
+        assert isinstance(wrapper, api.Cosmology)
+        assert isinstance(wrapper, api.CosmologyWrapper)
 
     def test_getattr(self, wrapper, cosmo):
         """Test that the wrapper can access the attributes of the wrapped object."""

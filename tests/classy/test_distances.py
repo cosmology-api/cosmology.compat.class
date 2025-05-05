@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 from hypothesis import given, settings
 
-from cosmology.api import DistanceMeasures
+from cosmology import api
 
 from .conftest import z_arr_st
 
@@ -21,7 +21,7 @@ class DistanceMeasures_Test:
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        assert isinstance(wrapper, DistanceMeasures)
+        assert isinstance(wrapper, api.DistanceMeasures)
 
     # =========================================================================
 
@@ -46,7 +46,7 @@ class DistanceMeasures_Test:
     def test_T_cmb(self, wrapper, cosmo, z):
         """Test that the wrapper's Tcmb is the same as the wrapped object's."""
         T = wrapper.T_cmb(z)
-        assert np.allclose(T, cosmo.T_cmb() * (1 + z))
+        assert np.allclose(T, np.asarray(cosmo.T_cmb()) * (z + 1))
         assert isinstance(T, np.ndarray)
 
     @pytest.mark.xfail(reason="TODO")
