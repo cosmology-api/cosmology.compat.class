@@ -32,6 +32,23 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         super().__post_init__()
 
         bkg = self.cosmo.get_background()
+        z = bkg["z"][::-1]
+
+        # Sum over all ncdm species
+        rho_ncdm = np.zeros_like(bkg["(.)rho_ncdm[0]"])
+        i = 0
+        while f"(.)rho_ncdm[{i}]" in bkg:
+            rho_ncdm += bkg[f"(.)rho_ncdm[{i}]"]
+            i += 1
+
+        # Redshift-dependent Omega_nu
+        Omega_nu_z = rho_ncdm / bkg["(.)rho_crit"]
+        object.__setattr__(self, "_Omega_nu0", Omega_nu_z[-1])
+
+        m_nu = self.cosmo.cosmo_arguments().get("m_ncdm")
+        m_nu_arr = () if m_nu is None else tuple(np.array(m_nu.split(","), dtype=float))
+        object.__setattr__(self, "_m_nu", m_nu_arr)
+
 
         self._cosmo_fn: dict[str, Any]
         object.__setattr__(
@@ -43,7 +60,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
                 "angular_distance": vectorize(self.cosmo.angular_distance),
                 "luminosity_distance": vectorize(self.cosmo.luminosity_distance),
                 "comoving_distance": InterpolatedUnivariateSpline(
-                    bkg["z"][::-1],
+                    z,
                     bkg["comov. dist."][::-1],
                     k=3,
                     ext=2,
@@ -51,11 +68,12 @@ class StandardCosmologyWrapper(CosmologyWrapper):
                 ),
                 "inv_comoving_distance": InterpolatedUnivariateSpline(
                     bkg["comov. dist."][::-1],
-                    bkg["z"][::-1],
+                    z,
                     k=3,
                     ext=2,
                     check_finite=True,
                 ),
+                "Omega_nu_interp": InterpolatedUnivariateSpline(z, Omega_nu_z[::-1], k=3)
             },
         )
 
@@ -150,7 +168,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     @property
     def Omega_nu0(self) -> Array:
         """Omega nu; the density/critical density of neutrinos at z=0."""
-        raise NotImplementedError
+        return np.asarray(self._Omega_nu0)
 
     @property
     def Neff(self) -> Array:
@@ -160,11 +178,11 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     @property
     def m_nu(self) -> tuple[Array, ...]:
         """Neutrino mass in eV."""
-        raise NotImplementedError
+        return self._m_nu
 
     def Omega_nu(self, z: InputT, /) -> Array:
         r"""Redshift-dependent neutrino density parameter."""
-        raise NotImplementedError
+        return np.asarray(self._Omega_nu_interp(z))
 
     # ----------------------------------------------
     # DarkEnergyComponent
