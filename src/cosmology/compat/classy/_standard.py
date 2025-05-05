@@ -320,7 +320,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
 
         Parameters
         ----------
-        d : Array, positional-only
+        dc : Array, positional-only
             Input distances.
 
         Returns
