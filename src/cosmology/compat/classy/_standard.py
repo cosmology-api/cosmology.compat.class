@@ -34,9 +34,9 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         bkg = self.cosmo.get_background()
         z = bkg["z"][::-1]
 
-        # Omega_nu0 = Om_ncdm / h^2
+        # Omega_nu0 := Om_ncdm / h^2
         omega_nu = self.cosmo.Om_ncdm()
-        h = self.cosmo.cosmo_arguments()['h']
+        h = self.cosmo.cosmo_arguments()["h"]
         Omega_nu0 = omega_nu / h**2
         object.__setattr__(self, "_Omega_nu0", Omega_nu0)
 
