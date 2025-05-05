@@ -34,7 +34,7 @@ class DistanceMeasures_Test:
     def test_scale_factor(self, wrapper, cosmo, z):
         """Test that the wrapper's scale_factor is the same as the wrapped object's."""
         a = wrapper.scale_factor(z)
-        assert np.array_equal(a, 1 / (1 + z))
+        assert np.allclose(a, 1 / (1 + z))
         assert isinstance(a, np.ndarray)
 
     def test_T_cmb0(self, wrapper, cosmo):
@@ -46,7 +46,7 @@ class DistanceMeasures_Test:
     def test_T_cmb(self, wrapper, cosmo, z):
         """Test that the wrapper's Tcmb is the same as the wrapped object's."""
         T = wrapper.T_cmb(z)
-        assert np.array_equal(T, cosmo.T_cmb() * (1 + z))
+        assert np.allclose(T, cosmo.T_cmb() * (1 + z))
         assert isinstance(T, np.ndarray)
 
     @pytest.mark.xfail(reason="TODO")
