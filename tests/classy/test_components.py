@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import sys
+from contextlib import nullcontext
+
 import numpy as np
 import pytest
 from hypothesis import given
@@ -9,6 +12,8 @@ from hypothesis import given
 from cosmology import api
 
 from .conftest import z_arr_st
+
+PY_LT_312 = sys.version_info < (3, 12)
 
 ################################################################################
 # TESTS
@@ -107,7 +112,8 @@ class NeutrinoComponent_Test:
         if hasattr(super(), "test_wrapper_is_compliant"):
             super().test_wrapper_is_compliant(wrapper)
 
-        assert isinstance(wrapper, api.NeutrinoComponent)
+        with pytest.raises(NotImplementedError) if PY_LT_312 else nullcontext():
+            assert isinstance(wrapper, api.NeutrinoComponent)
 
     @pytest.mark.xfail(reason="TODO")
     def test_Omega_nu0(self, wrapper, cosmo):
