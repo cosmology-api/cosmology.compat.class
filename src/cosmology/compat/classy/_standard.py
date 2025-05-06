@@ -40,13 +40,12 @@ class StandardCosmologyWrapper(CosmologyWrapper):
             [
                 "h",  # dimensionless Hubble parameter
                 "m_ncdm_in_eV",  # array of each neutrino mass
-                "omega_ncdm",  # physical density of neutrinos
             ]
         )
         h = derived["h"]
 
         # Omega_nu0 := Om_ncdm / h^2
-        Omega_nu0 = derived["omega_ncdm"] / h**2
+        Omega_nu0 = self.cosmo.Om_ncdm(0.0) / h**2
         object.__setattr__(self, "_Omega_nu0", Omega_nu0)
 
         # Parse neutrino masses
