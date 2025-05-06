@@ -42,9 +42,19 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         object.__setattr__(self, "_Omega_nu0", Omega_nu0)
 
         # Calculate neutrino masses
-        m_dict = self.cosmo.get_current_derived_parameters(["m_ncdm_in_eV"])
-        raw_masses = m_dict.get("m_ncdm_in_eV", [])
-        m_nu_arr = tuple(float(m) for m in raw_masses)
+        params = self.cosmo.pars
+
+        # Parse out "m_ncdm"
+        raw = params.get("m_ncdm")
+        m_nu_arr: tuple[Array, ...]
+        if raw is None:
+            m_nu_arr = ()
+        elif isinstance(raw, str):  # e.g. "0.06,0.02,0.02"
+            m_nu_arr = tuple(np.array(x) for x in raw.split(",") if x.strip())
+        elif isinstance(raw, (list, tuple)):  # e.g. ["0.06","0.02"]
+            m_nu_arr = tuple(np.array(x) for x in raw)
+        else:  # a single mass
+            m_nu_arr = (np.array(raw),)
         self._m_nu: tuple[Array, ...]
         object.__setattr__(self, "_m_nu", m_nu_arr)
 
