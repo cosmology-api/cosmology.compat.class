@@ -39,7 +39,6 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         derived = self.cosmo.get_current_derived_parameters(
             [
                 "h",  # dimensionless Hubble parameter
-                "m_ncdm_in_eV",  # array of each neutrino mass
             ]
         )
         h = derived["h"]
@@ -47,10 +46,6 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         # Omega_nu0 := Om_ncdm / h^2
         Omega_nu0 = self.cosmo.Om_ncdm(0.0) / h**2
         object.__setattr__(self, "_Omega_nu0", Omega_nu0)
-
-        # Parse neutrino masses
-        m_nu_arr = tuple(float(m) for m in derived["m_ncdm_in_eV"])
-        object.__setattr__(self, "_m_nu", m_nu_arr)
 
         self._cosmo_fn: dict[str, Any]
         object.__setattr__(
@@ -172,7 +167,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     @property
     def m_nu(self) -> tuple[Array, ...]:
         """Neutrino mass in eV."""
-        return self._m_nu  # type: ignore[return-value]
+        return (0.0,)  # TODO: implement this
 
     def Omega_nu(self, z: InputT, /) -> Array:
         r"""Redshift-dependent neutrino density parameter."""
