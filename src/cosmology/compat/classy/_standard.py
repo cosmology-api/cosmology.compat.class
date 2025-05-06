@@ -31,16 +31,26 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         """
         super().__post_init__()
 
+        # Background quantities
         bkg = self.cosmo.get_background()
         z = bkg["z"][::-1]
 
+        # Derived quantities
+        derived = self.cosmo.get_current_derived_parameters(
+            [
+                "h",  # dimensionless Hubble parameter
+                "m_ncdm_in_eV",  # array of each neutrino mass
+                "omega_ncdm",  # physical density of neutrinos
+            ]
+        )
+        h = derived["h"]
+
         # Omega_nu0 := Om_ncdm / h^2
-        h = self.cosmo.cosmo_arguments()["h"]
-        object.__setattr__(self, "_Omega_nu0", self.cosmo.Om_ncdm(0.0) / h**2)
+        Omega_nu0 = derived["omega_ncdm"] / h**2
+        object.__setattr__(self, "_Omega_nu0", Omega_nu0)
 
         # Parse neutrino masses
-        m_nu = self.cosmo.cosmo_arguments().get("m_ncdm")
-        m_nu_arr = () if m_nu is None else tuple(np.array(m_nu.split(","), dtype=float))
+        m_nu_arr = tuple(float(m) for m in derived["m_ncdm_in_eV"])
         object.__setattr__(self, "_m_nu", m_nu_arr)
 
         self._cosmo_fn: dict[str, Any]
