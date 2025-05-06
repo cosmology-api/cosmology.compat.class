@@ -47,6 +47,12 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         Omega_nu0 = self.cosmo.Om_ncdm(0.0) / h**2
         object.__setattr__(self, "_Omega_nu0", Omega_nu0)
 
+        # Calculate neutrino masses
+        n_nu = int(self.cosmo.ba.N_ncdm)  # background struct field
+        m_nu_arr = tuple(float(self.cosmo.ba.m_ncdm_in_eV[i]) for i in range(n_nu))
+        self._m_nu: tuple[Array, ...]
+        object.__setattr__(self, "_m_nu", m_nu_arr)
+
         self._cosmo_fn: dict[str, Any]
         object.__setattr__(
             self,
@@ -167,7 +173,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     @property
     def m_nu(self) -> tuple[Array, ...]:
         """Neutrino mass in eV."""
-        return (0.0,)  # TODO: implement this
+        return self._m_nu
 
     def Omega_nu(self, z: InputT, /) -> Array:
         r"""Redshift-dependent neutrino density parameter."""
