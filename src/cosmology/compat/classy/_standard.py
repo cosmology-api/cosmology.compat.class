@@ -31,7 +31,32 @@ class StandardCosmologyWrapper(CosmologyWrapper):
         """
         super().__post_init__()
 
+        # Background quantities
         bkg = self.cosmo.get_background()
+        z = bkg["z"][::-1]
+
+        # Omega_nu0 := Om_ncdm / h^2
+        h_dict = self.cosmo.get_current_derived_parameters(["h"])
+        h = h_dict["h"]
+        Omega_nu0 = self.cosmo.Om_ncdm(0.0) / h**2
+        object.__setattr__(self, "_Omega_nu0", Omega_nu0)
+
+        # Calculate neutrino masses
+        params = self.cosmo.pars
+
+        # Parse out "m_ncdm"
+        raw = params.get("m_ncdm")
+        m_nu_arr: tuple[Array, ...]
+        if raw is None:
+            m_nu_arr = ()
+        elif isinstance(raw, str):  # e.g. "0.06,0.02,0.02"
+            m_nu_arr = tuple(np.array(x) for x in raw.split(",") if x.strip())
+        elif isinstance(raw, (list, tuple)):  # e.g. ["0.06","0.02"]
+            m_nu_arr = tuple(np.array(x) for x in raw)
+        else:  # a single mass
+            m_nu_arr = (np.array(raw),)
+        self._m_nu: tuple[Array, ...]
+        object.__setattr__(self, "_m_nu", m_nu_arr)
 
         self._cosmo_fn: dict[str, Any]
         object.__setattr__(
@@ -43,19 +68,12 @@ class StandardCosmologyWrapper(CosmologyWrapper):
                 "angular_distance": vectorize(self.cosmo.angular_distance),
                 "luminosity_distance": vectorize(self.cosmo.luminosity_distance),
                 "comoving_distance": InterpolatedUnivariateSpline(
-                    bkg["z"][::-1],
-                    bkg["comov. dist."][::-1],
-                    k=3,
-                    ext=2,
-                    check_finite=True,
+                    z, bkg["comov. dist."][::-1], k=3, ext=2, check_finite=True
                 ),
                 "inv_comoving_distance": InterpolatedUnivariateSpline(
-                    bkg["comov. dist."][::-1],
-                    bkg["z"][::-1],
-                    k=3,
-                    ext=2,
-                    check_finite=True,
+                    bkg["comov. dist."][::-1], z, k=3, ext=2, check_finite=True
                 ),
+                "Omega_nu": vectorize(lambda z: self.cosmo.Om_ncdm(z) / h**2),
             },
         )
 
@@ -150,7 +168,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     @property
     def Omega_nu0(self) -> Array:
         """Omega nu; the density/critical density of neutrinos at z=0."""
-        raise NotImplementedError
+        return np.asarray(self._Omega_nu0)
 
     @property
     def Neff(self) -> Array:
@@ -160,11 +178,11 @@ class StandardCosmologyWrapper(CosmologyWrapper):
     @property
     def m_nu(self) -> tuple[Array, ...]:
         """Neutrino mass in eV."""
-        raise NotImplementedError
+        return self._m_nu
 
     def Omega_nu(self, z: InputT, /) -> Array:
         r"""Redshift-dependent neutrino density parameter."""
-        raise NotImplementedError
+        return np.asarray(self._cosmo_fn["Omega_nu"](z))
 
     # ----------------------------------------------
     # DarkEnergyComponent

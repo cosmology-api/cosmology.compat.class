@@ -144,14 +144,11 @@ ignore = [
   "COM812",  # trailing-comma-missing
   "D105", "D107", "D203", "D213", "D401",
   "FBT003",
-  "N802",
+  "N802", "N806",
   "PD",
   "RET505", "RET506", "RET507",
-  # (FIX)
   "FIX002",  # Found comment TODO
-  # Type-checking
   "TC001",
-  # flake8-todo (TD)
   "TD002",  # Missing author in TODO
   "TD003",  # Missing issue link on the line following this TODO
 ]
