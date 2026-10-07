@@ -1,3 +1,4 @@
+# Copyright (c) 2023, Nathaniel Starkman and Nicolas Tessore
 """The Cosmology API compatibility library for :mod:`classy`.
 
 This library provides wrappers for CAMB cosmology objects to be compatible with
