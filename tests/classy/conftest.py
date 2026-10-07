@@ -1,3 +1,4 @@
+# Copyright (c) 2023, Nathaniel Starkman and Nicolas Tessore
 """Test the Cosmology API compat library."""
 
 from __future__ import annotations

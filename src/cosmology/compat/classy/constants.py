@@ -1,3 +1,4 @@
+# Copyright (c) 2023, Nathaniel Starkman and Nicolas Tessore
 """CAMB cosmology constants.
 
 From the :mod:`cosmology.api`, the list of required constants is:
